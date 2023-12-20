@@ -1,0 +1,120 @@
+					Social Media Share Integration in Laravel
+					-----------------------------------------
+step 1:Add laravel share package
+--------------------------------
+
+	composer require jorenvanhocht/laravel-share
+
+step 2:Register Laravel Share
+
+Make sure to register the library package that we have installed in the config/app.php file.
+--------------------------------------------------------------------------------------------
+
+<?php
+  return [
+    'providers' => [
+        ...
+        ...        
+        Jorenvh\Share\Providers\ShareServiceProvider::class,
+    ];
+    'aliases' => [
+        ...
+        ...                
+        'Share' => Jorenvh\Share\ShareFacade::class,
+    ];
+  ];
+
+step 3:And reopen the terminal input this command.
+----------------------------------------------------
+
+	php artisan vendor:publish --provider="Jorenvh\Share\Providers\ShareServiceProvider"
+
+step 4:Add Controller
+Create a controller file using php artisan to enter the media share code. This is the main function that we will create.
+------------------------------------------------------------------------------------------------------------------------
+
+	php artisan make:controller SocialShareButtonsController
+
+step 5:Adjust the code as below
+--------------------------------------
+
+	app/Http/Controllers/SocialShareButtonsController.php File.
+<?php
+namespace App\Http\Controllers;
+use Illuminate\Http\Request;
+class SocialShareButtonsController extends Controller
+{
+    public function ShareWidget()
+    {
+        $shareComponent = \Share::page(
+            'https://www.positronx.io/create-autocomplete-search-in-laravel-with-typeahead-js/',
+            'Your share text comes here',
+        )
+        ->facebook()
+        ->twitter()
+        ->linkedin()
+        ->telegram()
+        ->whatsapp()        
+        ->reddit();
+        
+        return view('posts', compact('shareComponent'));
+    }
+    
+}
+
+step 6:Add Route
+You need to add a route in route/web.php. This will connect the view with the controller we created.
+----------------------------------------------------------------------------------------------------
+
+<?php
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SocialShareButtonsController;
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+*/
+Route::get('/social-media-share', [SocialShareButtonsController::class,'ShareWidget']);
+
+step 7(Final):Make a View
+Now we will create a view to display the share button in resources/views. Name it post.blade.php. Import bootstrap and create a few lines of css.
+----------------------------------------------------------------------------------------------------------------------
+
+	resources/views/posts.blade.php File.
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Implement Social Share Button in Laravel</title>
+        
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+        <style>
+            div#social-links {
+                margin: 0 auto;
+                max-width: 500px;
+            }
+            div#social-links ul li {
+                display: inline-block;
+            }          
+            div#social-links ul li a {
+                padding: 20px;
+                border: 1px solid #ccc;
+                margin: 1px;
+                font-size: 30px;
+                color: #222;
+                background-color: #ccc;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container mt-4">
+            <h2 class="mb-5 text-center">Laravel Social Share Buttons Example</h2>
+            {!! $shareComponent !!}
+        </div>
+    </body>
+</html>
+
+
