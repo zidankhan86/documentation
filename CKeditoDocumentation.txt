@@ -1,0 +1,45 @@
+								
+									CKEditor Ecosystem Documentation- CKEditor 5
+					
+								      ---->guideQuick start<---
+
+
+Step 1: Past CDN to your master blade for Quick Use CKEditor 5
+---------------------------------------------------------------
+	<script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
+
+
+
+Step 2: Put id in your input tag
+--------------------------------
+	<div id="editor"></div>
+
+
+
+Step 3: Define input tag id in the script ,Ex: #editor
+------------------------------------------------------
+	<script>
+  		ClassicEditor
+	        .create( document.querySelector( '#editor' ) )
+	        .catch( error => {
+	            console.error( error );
+	        } );
+	</script>
+
+Step 4: Add this script for design of your CKEditor
+---------------------------------------------------
+	  <style>
+	            #container {
+	                width: 1000px;
+	                margin: 20px auto;
+	            }
+	            .ck-editor__editable[role="textbox"] {
+	                /* editing area */
+	                min-height: 200px;
+	            }
+	            .ck-content .image {
+	                /* block images */
+	                max-width: 80%;
+	                margin: 20px auto;
+	            }
+	        </style>

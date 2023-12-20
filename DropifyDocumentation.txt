@@ -1,0 +1,53 @@
+						
+									Dropify Documentation
+INSTALL DROPIFY- 
+----------------------
+$ npm install dropify
+
+[Note: Node Js install before use it]
+
+
+Step 1: Make a file in your public folder In this name dropify.js
+And put this two line of code 
+----------------------------------------------------------------
+
+
+import 'dropify/dist/js/dropify.min.js';
+import 'dropify/dist/css/dropify.min.css';
+
+
+Step 1.1: Put the script on your master blade and dynamic by following your public folder.
+Ex: {{asset(‘backend/js/dropify.js’)}}
+-------------------------------------------------------------------------------------------
+
+<script src="{{ asset('js/dropify.js') }}"></script>
+
+
+Step 2: Past CDN for Quick Use Dropify
+----------------------------------------
+
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Include Dropify CSS and JS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css" rel="stylesheet">
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js"></script>
+
+
+
+Step 3: Define input tag class=” dropify” in your form
+----------------------------------------------------------
+
+class=” dropify”
+
+
+Step 4:Past this script on your blade 
+---------------------------------------
+
+<script>
+$('.dropify').dropify({ messages: {
+'default': 'Drag and drop a file here or click', 'replace': 'Drag and drop or click to replace', 'remove': 'Remove',
+'error':	'Ooops, something wrong happended.'
+}
+});
+</script>
