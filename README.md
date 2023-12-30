@@ -1,4 +1,4 @@
-# Package Quick User documentation
+#  Quick Use package documentation for laravel
 
 I am working with a Laravel package that can be quickly installed and used in your project
 
