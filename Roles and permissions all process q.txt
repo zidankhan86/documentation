@@ -1,0 +1,100 @@
+Roles and permissions all process quick Uses
+
+Step 1: Install Package Laravel 6+
+
+composer require spatie/laravel-permission
+
+Step 2 : Publish Vendor
+php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"
+
+Step 3:php artisan migrate
+
+Step 4: Use HasRoles on User Model
+
+namespace App\Models;
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
+
+class User extends Authenticatable
+{
+    use Notifiable, HasRoles;
+
+    // Other model properties and methods...
+}
+
+Step 5: Make Routes
+
+Route::get('/roles', [RolePermissionController::class, 'createRole'])->name('roles.create');
+Route::get('/roles/index', [RolePermissionController::class, 'index'])->name('roles.index');
+Route::post('/roles/store', [RolePermissionController::class, 'storeRole'])->name('store.roles');
+Route::post('/permissions/store', [RolePermissionController::class, 'createPermission'])->name('permissions.create');
+Route::post('/roles/assign', [RolePermissionController::class, 'assignRole'])->name('assign.role');
+Route::post('/permissions/assign', [RolePermissionController::class, 'assignPermission'])->name('assign.permission');
+
+Step 6: Make Functions
+public function index()
+    {
+        $roles = Role::with('permissions', 'users')->get();
+        $permissions = Permission::all();
+        $users = User::all();
+
+        return view('backend.role.index', compact('roles', 'permissions', 'users'));
+    }
+    public function createRole()
+    {
+    
+        return view('backend.role.create');
+    }
+    public function storeRole(Request $request)
+    {
+         $role = Role::create(['name' => $request->name]);
+
+        return back()->with('success', 'Role created successfully');
+    }
+
+    public function createPermission(Request $request)
+    {
+        $permission = Permission::create(['name' => $request->name]);
+
+        return back()->with('success', 'Permissions created successfully');
+    }
+
+    public function assignRole(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'role_name' => 'required|exists:roles,name'
+        ]);
+
+        $user = User::findOrFail($request->user_id);
+        $user->assignRole($request->role_name);
+
+        return redirect()->route('roles.index')->with('success', 'Role assigned successfully.');
+    }
+
+    public function assignPermission(Request $request)
+    {
+        $request->validate([
+            'role_name' => 'required|exists:roles,name',
+            'permission_name' => 'required|exists:permissions,name'
+        ]);
+
+        $role = Role::findByName($request->role_name);
+        $role->givePermissionTo($request->permission_name);
+
+        return redirect()->route('roles.index')->with('success', 'Permission assigned successfully.');
+    }
+
+
+
+basic uses : 
+ 	@can('view users')
+          <li class="nav-item ">
+            <a class="nav-link" href="{{ route('user.list') }}" >                User
+          
+            </a>
+          </li>
+          @endcan
+
